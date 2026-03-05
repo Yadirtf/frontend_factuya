@@ -1,0 +1,37 @@
+﻿
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\app\(auth)\layout.tsx
+  2:10  warning  'Card' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\app\(auth)\login\page.tsx
+  12:17  warning  'AxiosError' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\app\(dashboard)\dashboard\page.tsx
+  15:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\app\page.tsx
+  14:3   warning  'BarChart3' is defined but never used  @typescript-eslint/no-unused-vars
+  15:3   warning  'Moon' is defined but never used       @typescript-eslint/no-unused-vars
+  27:16  warning  'error' is defined but never used      @typescript-eslint/no-unused-vars
+
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\app\setup\page.tsx
+  106:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\components\customers\CustomerForm.tsx
+  71:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\components\invoices\InvoiceForm.tsx
+  3:10  warning  'useState' is defined but never used     @typescript-eslint/no-unused-vars
+  3:20  warning  'useEffect' is defined but never used    @typescript-eslint/no-unused-vars
+  7:42  warning  'AlertCircle' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\hooks\useCustomers.ts
+  24:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Celred\Desktop\PROYECT\FACTURAYA_BACKEND_FRONTEND\factuya\hooks\useInvoices.ts
+  51:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  70:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  89:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Ô£û 16 problems (8 errors, 8 warnings)
+

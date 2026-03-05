@@ -50,8 +50,8 @@ export const InvoiceList = ({ invoices, onSend, onCancel, isSending }: InvoiceLi
                                 <TableCell className="font-medium">{invoice.prefix}-{invoice.number}</TableCell>
                                 <TableCell>
                                     <div className="flex flex-col">
-                                        <span className="font-medium">{invoice.customer.name}</span>
-                                        <span className="text-xs text-slate-500">{invoice.customer.identification}</span>
+                                        <span className="font-medium">Cliente: {invoice.customerId.substring(0, 8)}...</span>
+                                        <span className="text-xs text-slate-500">ID: {invoice.customerId}</span>
                                     </div>
                                 </TableCell>
                                 <TableCell>
@@ -61,7 +61,7 @@ export const InvoiceList = ({ invoices, onSend, onCancel, isSending }: InvoiceLi
                                     <InvoiceStatusBadge status={invoice.status} />
                                 </TableCell>
                                 <TableCell className="text-right font-medium">
-                                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(invoice.totalAmount)}
+                                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(invoice.total)}
                                 </TableCell>
                                 <TableCell className="text-right items-center">
                                     <div className="flex justify-end gap-2">

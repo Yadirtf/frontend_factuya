@@ -4,6 +4,7 @@ export enum InvoiceStatus {
     SENT = 'SENT',
     ACCEPTED = 'ACCEPTED',
     REJECTED = 'REJECTED',
+    CANCELLED = 'CANCELLED',
 }
 
 export enum InvoiceType {
@@ -12,47 +13,67 @@ export enum InvoiceType {
     ND = 'ND',
 }
 
-export interface Money {
-    amount: number;
-    currency: string;
+export enum TaxType {
+    IVA = '01',
+    ICA = '03',
+    INC = '04',
 }
 
 export interface Tax {
-    type: string;
-    name: string;
+    type: TaxType;
     rate: number;
-    amount: number;
     base: number;
+    amount: number;
 }
 
 export interface InvoiceItem {
-    id?: string;
+    id: string;
+    productCode: string;
     description: string;
     quantity: number;
     unitPrice: number;
+    discount: number;
     subtotal: number;
-    tax: number;
+    totalTax: number;
     total: number;
+    taxes: Tax[];
 }
 
 export interface Customer {
     id: string;
-    name: string;
-    identification: string;
+    firstName: string;
+    lastName: string;
+    businessName?: string;
+    documentType: string;
+    documentNumber: string;
     email: string;
+    phone: string;
+    address: string;
+    city: string;
+    department: string;
 }
 
 export interface Invoice {
     id: string;
+    companyId: string;
     number: string;
     prefix: string;
+    fullNumber: string;
     type: InvoiceType;
     status: InvoiceStatus;
-    customer: Customer;
-    issueDate: string;
-    totalAmount: number;
+    customerId: string;
+    items: InvoiceItem[];
+    subtotal: number;
+    totalTax: number;
+    total: number;
     cufe?: string;
+    qrCode?: string;
+    issueDate: string;
+    dueDate?: string;
+    notes?: string;
     dianResponse?: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface InvoiceFilters {
@@ -69,5 +90,4 @@ export interface PaginatedResponse<T> {
     total: number;
     page: number;
     limit: number;
-    totalPages: number;
 }

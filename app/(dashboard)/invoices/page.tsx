@@ -116,7 +116,7 @@ export default function InvoicesPage() {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                disabled={!data || filters.page >= data.totalPages}
+                                disabled={!data || filters.page >= Math.ceil(data.total / filters.limit)}
                                 onClick={() => setFilters(prev => ({ ...prev, page: prev.page + 1 }))}
                             >
                                 Siguiente

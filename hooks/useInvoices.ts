@@ -56,11 +56,30 @@ export const useInvoices = (filters: InvoiceFilters = {}) => {
         });
     };
 
+    // Mutation para crear factura
+    const useCreateInvoice = () => {
+        return useMutation({
+            mutationFn: async (data: Record<string, unknown>) => {
+                const response = await apiClient.post<Invoice>('/invoices', data);
+                return response.data;
+            },
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['invoices'] });
+                toast.success('Factura creada exitosamente');
+            },
+            onError: (error: any) => {
+                toast.error('Error al crear la factura', {
+                    description: error.response?.data?.message || 'Ocurrió un error inesperado',
+                });
+            },
+        });
+    };
+
     // Mutation para cancelar factura
     const useCancelInvoice = () => {
         return useMutation({
             mutationFn: async (id: string) => {
-                const response = await apiClient.post(`/invoices/${id}/cancel`);
+                const response = await apiClient.post<Invoice>(`/invoices/${id}/cancel`);
                 return response.data;
             },
             onSuccess: () => {
@@ -78,6 +97,7 @@ export const useInvoices = (filters: InvoiceFilters = {}) => {
     return {
         useGetInvoices,
         useGetInvoice,
+        useCreateInvoice,
         useSendToDian,
         useCancelInvoice,
     };
