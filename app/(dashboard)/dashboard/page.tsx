@@ -1,10 +1,10 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '@/lib/api-client';
+import { useInvoices } from '@/hooks/useInvoices';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { InvoiceStatus } from '@/lib/types/invoice';
 
 // Interface mock asumiendo que el backend nos devolverá en un futuro un enpoint de stats
 interface DashboardStats {
@@ -17,24 +17,16 @@ interface DashboardStats {
 
 export default function DashboardPage() {
     const { user } = useAuthStore();
-
-    // Mock Query (En producción conectará al endpoint de Dashboard de la empresa)
-    // Usamos el listado de facturas paginado como base para calcular kpis rápido
-    const { data: invoicesResult, isLoading } = useQuery({
-        queryKey: ['invoices'],
-        queryFn: async () => {
-            const res = await apiClient.get('/invoices?limit=100');
-            return res.data;
-        },
-    });
+    const { useGetInvoices } = useInvoices({ limit: 100 });
+    const { data: invoicesResult, isLoading } = useGetInvoices();
 
     const invoices = invoicesResult?.data || [];
 
     const stats: DashboardStats = {
         totalInvoices: invoices.length,
-        acceptedDian: invoices.filter((i: any) => i.status === 'ACCEPTED').length,
-        rejectedDian: invoices.filter((i: any) => i.status === 'REJECTED').length,
-        pendingDocs: invoices.filter((i: any) => i.status === 'DRAFT' || i.status === 'PENDING').length,
+        acceptedDian: invoices.filter((i) => i.status === InvoiceStatus.ACCEPTED).length,
+        rejectedDian: invoices.filter((i) => i.status === InvoiceStatus.REJECTED).length,
+        pendingDocs: invoices.filter((i) => i.status === InvoiceStatus.DRAFT || i.status === InvoiceStatus.PENDING).length,
         recentInvoices: invoices.slice(0, 5),
     };
 
@@ -106,17 +98,17 @@ export default function DashboardPage() {
                                 {stats.recentInvoices.map((inv) => (
                                     <div key={inv.id} className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border">
                                         <div>
-                                            <p className="text-sm font-medium text-slate-900">{inv.fullNumber}</p>
+                                            <p className="text-sm font-medium text-slate-900">{inv.prefix}-{inv.number}</p>
                                             <p className="text-xs text-slate-500">{new Date(inv.issueDate).toLocaleDateString()}</p>
                                         </div>
                                         <div className="text-right">
                                             <p className="text-sm font-bold text-slate-900">
-                                                $ {inv.total.toLocaleString()}
+                                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(inv.totalAmount)}
                                             </p>
                                             <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${inv.status === 'ACCEPTED' ? 'bg-emerald-100 text-emerald-700' :
-                                                    inv.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
-                                                        inv.status === 'DRAFT' ? 'bg-slate-200 text-slate-700' :
-                                                            'bg-amber-100 text-amber-700'
+                                                inv.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
+                                                    inv.status === 'DRAFT' ? 'bg-slate-200 text-slate-700' :
+                                                        'bg-amber-100 text-amber-700'
                                                 }`}>
                                                 {inv.status}
                                             </span>

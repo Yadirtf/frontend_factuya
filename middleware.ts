@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Rutas estrictamente públicas
-const publicRoutes = ['/login', '/register'];
+const publicRoutes = ['/login', '/register', '/setup'];
 
 // Rutas estáticas de Next.js que no deben interceptarse
 const staticPaths = ['/_next', '/api', '/favicon.ico'];

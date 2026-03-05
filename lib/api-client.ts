@@ -10,7 +10,7 @@ interface TokenResponse {
 
 // Cliente global pre-configurado
 export const apiClient = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
+    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1',
     withCredentials: true, // Importante para enviar Cookies (refresh token)
     headers: {
         'Content-Type': 'application/json',
