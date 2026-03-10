@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { useCompany } from '@/hooks/useCompany';
 import { toast } from 'sonner';
 import { Loader2, Plus, Building2 } from 'lucide-react';
@@ -27,21 +26,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-const companySchema = z.object({
-    nit: z.string().min(8, 'NIT inválido'),
-    businessName: z.string().min(3, 'Nombre de empresa demasiado corto'),
-    tradeName: z.string().optional().or(z.literal('')),
-    email: z.string().email('Correo inválido').optional().or(z.literal('')),
-    phone: z.string().min(7, 'Teléfono obligatorio'),
-    address: z.string().min(5, 'Dirección física obligatoria'),
-    city: z.string().min(2, 'Ciudad obligatoria'),
-    department: z.string().min(2, 'Departamento obligatorio'),
-    taxRegime: z.enum(['SIMPLIFIED', 'COMMON']),
-    economicActivity: z.string().min(4, 'Código CIIU obligatorio'),
-});
-
-type CompanyValues = z.infer<typeof companySchema>;
+import { companySchema, CompanyValues } from '@/schemas/company.schema';
 
 export function CompanyRegistrationModal() {
     const [open, setOpen] = useState(false);
