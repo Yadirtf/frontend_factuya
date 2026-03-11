@@ -1,19 +1,12 @@
 'use client';
 
-import { Plus, Search, Filter, Loader2 } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { InvoiceList } from "@/components/invoices/InvoiceList";
-import { InvoiceStatus } from "@/lib/types/invoice";
 import Link from "next/link";
 import { useInvoicePage } from "@/hooks/useInvoicePage";
+import { InvoiceFilters } from "./list/InvoiceFilters";
+import { InvoicePagination } from "./list/InvoicePagination";
 
 export function InvoicesContent() {
     const {
@@ -37,37 +30,7 @@ export function InvoicesContent() {
                 </Button>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-4 items-end bg-white p-4 rounded-lg border shadow-sm">
-                <div className="w-full md:w-1/3 space-y-2">
-                    <label className="text-sm font-medium text-slate-700 ml-1 flex items-center gap-2">
-                        <Search className="h-3 w-3" /> Buscar Cliente
-                    </label>
-                    <Input placeholder="Nombre o NIT..." className="h-10" />
-                </div>
-
-                <div className="w-full md:w-1/4 space-y-2">
-                    <label className="text-sm font-medium text-slate-700 ml-1 flex items-center gap-2">
-                        <Filter className="h-3 w-3" /> Estado
-                    </label>
-                    <Select onValueChange={handleStatusChange} defaultValue="ALL">
-                        <SelectTrigger className="h-10">
-                            <SelectValue placeholder="Todos los estados" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="ALL">Todos los estados</SelectItem>
-                            <SelectItem value={InvoiceStatus.DRAFT}>Borrador</SelectItem>
-                            <SelectItem value={InvoiceStatus.PENDING}>Pendiente</SelectItem>
-                            <SelectItem value={InvoiceStatus.SENT}>Enviado</SelectItem>
-                            <SelectItem value={InvoiceStatus.ACCEPTED}>Aceptado</SelectItem>
-                            <SelectItem value={InvoiceStatus.REJECTED}>Rechazado</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                <Button variant="outline" className="h-10 px-6">
-                    Filtrar
-                </Button>
-            </div>
+            <InvoiceFilters handleStatusChange={handleStatusChange} />
 
             {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-24 gap-4 bg-white rounded-lg border">
@@ -88,27 +51,14 @@ export function InvoicesContent() {
                         isSending={sendMutation.isPending}
                     />
 
-                    <div className="flex items-center justify-between text-sm text-slate-500 px-2 mt-4">
-                        <p>Mostrando {data?.data.length || 0} de {data?.total || 0} resultados</p>
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                disabled={filters.page === 1}
-                                onClick={() => setFilters(prev => ({ ...prev, page: prev.page - 1 }))}
-                            >
-                                Anterior
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                disabled={!data || filters.page >= Math.ceil(data.total / filters.limit)}
-                                onClick={() => setFilters(prev => ({ ...prev, page: prev.page + 1 }))}
-                            >
-                                Siguiente
-                            </Button>
-                        </div>
-                    </div>
+                    <InvoicePagination 
+                        total={data?.total || 0}
+                        limit={filters.limit}
+                        page={filters.page}
+                        itemCount={data?.data.length || 0}
+                        onPrevious={() => setFilters(prev => ({ ...prev, page: prev.page - 1 }))}
+                        onNext={() => setFilters(prev => ({ ...prev, page: prev.page + 1 }))}
+                    />
                 </div>
             )}
         </div>
