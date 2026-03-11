@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { useInvoices } from '@/hooks/useInvoices';
 import { useCustomers } from '@/hooks/useCustomers';
+import { useCompany } from '@/hooks/useCompany';
+import { useAuthStore } from '@/store/auth.store';
 import { InvoiceType, TaxType } from '@/lib/types/invoice';
 import { invoiceSchema, InvoiceFormValues } from '@/schemas/schema';
 import { calculateInvoiceTotals } from '@/lib/invoice-math';
@@ -12,7 +14,9 @@ export const useInvoiceForm = () => {
     const router = useRouter();
     const { useCreateInvoice } = useInvoices();
     const createMutation = useCreateInvoice();
-    const { data: customersData } = useCustomers({ limit: 100 });
+    const { useCompanies } = useCompany();
+    const { data: companiesData } = useCompanies(1, 100);
+    const { user } = useAuthStore();
 
     const form = useForm<InvoiceFormValues>({
         resolver: zodResolver(invoiceSchema),
@@ -32,6 +36,9 @@ export const useInvoiceForm = () => {
         },
     });
 
+    const watchCompanyId = user?.role === 'SUPER_ADMIN' ? form.watch('companyId') : user?.companyId;
+    const { data: customersData } = useCustomers({ limit: 100, companyId: watchCompanyId || user?.companyId });
+
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: 'items',
@@ -41,8 +48,9 @@ export const useInvoiceForm = () => {
     const totals = calculateInvoiceTotals(watchItems as any);
 
     const onSubmit = (values: InvoiceFormValues) => {
-        const payload = {
+        const payload: any = {
             ...values,
+            companyId: user?.role === 'SUPER_ADMIN' ? values.companyId : undefined,
             items: values.items.map(item => ({
                 productCode: item.productCode,
                 description: item.description,
@@ -74,5 +82,7 @@ export const useInvoiceForm = () => {
         onSubmit,
         isPending: createMutation.isPending,
         customersData,
+        companiesData,
+        user,
     };
 };

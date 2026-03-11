@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 import { Customer, PaginatedResponse } from '@/lib/types/invoice';
 
-export const useCustomers = (filters: { search?: string; page?: number; limit?: number } = {}) => {
+export const useCustomers = (filters: { search?: string; page?: number; limit?: number; companyId?: string } = {}) => {
     return useQuery({
         queryKey: ['customers', filters],
         queryFn: async () => {
@@ -10,6 +10,7 @@ export const useCustomers = (filters: { search?: string; page?: number; limit?: 
             if (filters.search) params.append('search', filters.search);
             if (filters.page) params.append('page', filters.page.toString());
             if (filters.limit) params.append('limit', filters.limit.toString());
+            if (filters.companyId) params.append('companyId', filters.companyId);
 
             const response = await apiClient.get<PaginatedResponse<Customer>>(`/customers?${params.toString()}`);
             return response.data;

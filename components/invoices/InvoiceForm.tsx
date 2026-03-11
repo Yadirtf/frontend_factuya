@@ -18,6 +18,8 @@ export const InvoiceForm = () => {
         onSubmit,
         isPending,
         customersData,
+        companiesData,
+        user,
     } = useInvoiceForm();
 
     return (
@@ -27,6 +29,8 @@ export const InvoiceForm = () => {
                     <InvoiceGeneralInfo 
                         form={form} 
                         customers={customersData?.data} 
+                        companies={companiesData?.data}
+                        user={user}
                     />
                     <InvoiceTotals 
                         totals={totals} 

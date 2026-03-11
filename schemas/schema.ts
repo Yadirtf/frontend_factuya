@@ -14,6 +14,7 @@ export const itemSchema = z.object({
 export const invoiceSchema = z.object({
     type: z.nativeEnum(InvoiceType),
     customerId: z.string().min(1, 'Seleccione un cliente'),
+    companyId: z.string().optional(),
     issueDate: z.string(),
     dueDate: z.string().optional(),
     notes: z.string().optional(),

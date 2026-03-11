@@ -3,27 +3,14 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { useCreateCustomer } from '@/hooks/useCustomers';
+import { useAuthStore } from '@/store/auth.store';
+import { useCompany } from '@/hooks/useCompany';
 import { toast } from 'sonner';
+import { CustomerRegistrationForm } from './form/CustomerRegistrationForm';
 
 const customerSchema = z.object({
+    companyId: z.string().optional(),
     documentType: z.string().min(1, 'Tipo requerido'),
     documentNumber: z.string().min(1, 'Número requerido'),
     firstName: z.string().min(1, 'Nombre requerido'),
@@ -36,7 +23,7 @@ const customerSchema = z.object({
     department: z.string().min(1, 'Departamento requerido'),
 });
 
-type CustomerFormValues = z.infer<typeof customerSchema>;
+export type CustomerFormValues = z.infer<typeof customerSchema>;
 
 interface CustomerFormProps {
     onSuccess?: () => void;
@@ -44,6 +31,9 @@ interface CustomerFormProps {
 
 export const CustomerForm = ({ onSuccess }: CustomerFormProps) => {
     const createMutation = useCreateCustomer();
+    const { user } = useAuthStore();
+    const { useCompanies } = useCompany();
+    const { data: companiesData } = useCompanies(1, 100);
 
     const form = useForm<CustomerFormValues>({
         resolver: zodResolver(customerSchema),
@@ -78,170 +68,12 @@ export const CustomerForm = ({ onSuccess }: CustomerFormProps) => {
     };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="documentType"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Tipo de Documento</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="13">Cédula de Ciudadanía</SelectItem>
-                                        <SelectItem value="31">NIT</SelectItem>
-                                        <SelectItem value="22">Cédula de Extranjería</SelectItem>
-                                        <SelectItem value="41">Pasaporte</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="documentNumber"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Número de Documento</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="12345678" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Nombres</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Juan" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Apellidos</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Pérez" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-
-                <FormField
-                    control={form.control}
-                    name="businessName"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Razón Social (Opcional)</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Empresa S.A.S" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="cliente@ejemplo.com" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Teléfono</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="3001234567" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-
-                <FormField
-                    control={form.control}
-                    name="address"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Dirección</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Calle 123 #45-67" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="city"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Ciudad</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Bogotá" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="department"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Departamento</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Cundinamarca" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-
-                <Button
-                    type="submit"
-                    className="w-full bg-emerald-600 hover:bg-emerald-700"
-                    disabled={createMutation.isPending}
-                >
-                    {createMutation.isPending ? 'Registrando...' : 'Registrar Cliente'}
-                </Button>
-            </form>
-        </Form>
+        <CustomerRegistrationForm
+            form={form}
+            onSubmit={onSubmit}
+            isPending={createMutation.isPending}
+            user={user}
+            companies={companiesData?.data}
+        />
     );
 };
