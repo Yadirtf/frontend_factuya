@@ -7,7 +7,7 @@ const publicRoutes = ['/login', '/register', '/setup'];
 // Rutas estáticas de Next.js que no deben interceptarse
 const staticPaths = ['/_next', '/api', '/favicon.ico'];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Ignorar archivos estáticos
