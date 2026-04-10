@@ -15,6 +15,7 @@ export function CompanyConfigContent() {
         address, setAddress,
         phone, setPhone,
         softwareId, setSoftwareId,
+        softwarePin, setSoftwarePin,
         technicalKey, setTechnicalKey,
         isTestEnvironment, setIsTestEnvironment,
         resolutionNumber, setResolutionNumber,
@@ -85,6 +86,10 @@ export function CompanyConfigContent() {
                             <div className="space-y-2">
                                 <Label>Software ID</Label>
                                 <Input value={softwareId} onChange={e => setSoftwareId(e.target.value)} placeholder="Ej: 3k4j5h-..." />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Software PIN</Label>
+                                <Input value={softwarePin} onChange={e => setSoftwarePin(e.target.value)} placeholder="Ej: 12345" />
                             </div>
                             <div className="space-y-2">
                                 <Label>Test Set ID / Llave técnica</Label>

@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dialog';
 import { companySchema, CompanyValues } from '@/schemas/company.schema';
 import { CompanyRegistrationForm } from './form/CompanyRegistrationForm';
+import { handleApiValidationErrors } from '@/lib/utils/error-handler';
 
 export function CompanyRegistrationModal() {
     const [open, setOpen] = useState(false);
@@ -25,18 +26,25 @@ export function CompanyRegistrationModal() {
     const createMutation = useCreateCompany();
 
     const form = useForm<CompanyValues>({
-        resolver: zodResolver(companySchema),
+        mode: 'onTouched',
+        resolver: zodResolver(companySchema) as any,
         defaultValues: {
             nit: '',
+            dv: '',
+            organizationType: 1,
+            documentType: '31', // NIT
             businessName: '',
             tradeName: '',
             email: '',
             phone: '',
             address: '',
+            postalCode: '',
             city: '',
             department: '',
             taxRegime: 'COMMON',
+            taxResponsibilities: ['O-47'], // updated default just in case
             economicActivity: '',
+            mercantileRegistration: '',
         },
     });
 
@@ -51,9 +59,7 @@ export function CompanyRegistrationModal() {
             },
             onError: (error: any) => {
                 console.error('FRONTEND ERROR DUMP:', error?.response?.data || error);
-                toast.error('Error al registrar empresa', {
-                    description: JSON.stringify(error?.response?.data?.message || error.message),
-                });
+                handleApiValidationErrors(error, form);
             },
         });
     };

@@ -13,6 +13,7 @@ export function useCompanySettings() {
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
     const [softwareId, setSoftwareId] = useState('');
+    const [softwarePin, setSoftwarePin] = useState('');
     const [technicalKey, setTechnicalKey] = useState('');
     const [isTestEnvironment, setIsTestEnvironment] = useState(true);
     const [resolutionNumber, setResolutionNumber] = useState('');
@@ -27,6 +28,7 @@ export function useCompanySettings() {
             setAddress(company.address || '');
             setPhone(company.phone || '');
             setSoftwareId(company.dianConfig?.softwareId || '');
+            setSoftwarePin(company.dianConfig?.pin || '');
             setTechnicalKey(company.dianConfig?.technicalKey || '');
             setIsTestEnvironment(company.dianConfig?.isTestEnvironment ?? true);
             setResolutionNumber(company.dianConfig?.resolutionNumber || '');
@@ -41,6 +43,7 @@ export function useCompanySettings() {
                 phone,
                 dianConfig: {
                     softwareId,
+                    pin: softwarePin,
                     technicalKey,
                     isTestEnvironment,
                     resolutionNumber,
@@ -75,6 +78,7 @@ export function useCompanySettings() {
         address, setAddress,
         phone, setPhone,
         softwareId, setSoftwareId,
+        softwarePin, setSoftwarePin,
         technicalKey, setTechnicalKey,
         isTestEnvironment, setIsTestEnvironment,
         resolutionNumber, setResolutionNumber,
